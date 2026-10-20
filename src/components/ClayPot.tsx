@@ -265,14 +265,19 @@ export default function ClayPot({
       {/* Bottom Controls: Heat Control Levers & Big Red Serve Button */}
       <div className="w-full flex flex-col items-center gap-2 mt-auto pt-2 z-20">
         {/* Heat Control Levers */}
-        <div className="flex items-center gap-1.5 bg-surface-container-low px-3 py-1.5 rounded-2xl shadow-[0_2px_0_0_#d5c4ae]">
-          <span className="text-[11px] font-extrabold text-on-surface-variant flex items-center gap-1 mr-1">
-            <span className="material-symbols-outlined text-secondary text-[16px]">local_fire_department</span>
-            Api Anglo:
+        <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 bg-surface-container-low px-2 sm:px-3 py-1.5 rounded-2xl shadow-[0_2px_0_0_#d5c4ae]">
+          <span className="text-[10px] sm:text-[11px] font-extrabold text-on-surface-variant flex items-center gap-1 mr-0.5 sm:mr-1">
+            <span className="material-symbols-outlined text-secondary text-[15px] sm:text-[16px]">local_fire_department</span>
+            Api:
           </span>
           {(['low', 'medium', 'high'] as HeatLevel[]).map(level => {
             const isActive = heatLevel === level;
             const labels = {
+              low: 'Kecil',
+              medium: 'Sedang',
+              high: 'Besar'
+            };
+            const fullLabels = {
               low: 'Kecil (Tanak)',
               medium: 'Sedang (Harum)',
               high: 'Besar (Golak)'
@@ -282,7 +287,7 @@ export default function ClayPot({
                 key={level}
                 type="button"
                 onClick={() => handleHeatChange(level)}
-                className={`text-xs font-extrabold px-3 py-1 rounded-xl transition-all ${
+                className={`text-[11px] sm:text-xs font-extrabold px-2.5 sm:px-3 py-1 rounded-xl transition-all ${
                   isActive
                     ? level === 'high'
                       ? 'bg-secondary text-on-secondary shadow-[0_2px_0_0_#93000b]'
@@ -292,7 +297,8 @@ export default function ClayPot({
                     : 'text-on-surface hover:bg-surface-container'
                 }`}
               >
-                {labels[level]}
+                <span className="inline sm:hidden">{labels[level]}</span>
+                <span className="hidden sm:inline">{fullLabels[level]}</span>
               </button>
             );
           })}

@@ -77,48 +77,78 @@ export default function SpiceRoutePage() {
           </div>
 
           {/* Pinisi Logistical HUD Ribbon */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-surface-container-low p-2 rounded-2xl shadow-[0_4px_0_0_#d5c4ae] border border-outline-variant/30">
-            <div className="flex items-center gap-2.5 p-2 rounded-xl bg-surface-container-lowest">
-              <div className="w-9 h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-primary shrink-0">
-                <span className="material-symbols-outlined text-[20px]">directions_boat</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 bg-surface-container-low p-2 rounded-2xl shadow-[0_4px_0_0_#d5c4ae] border border-outline-variant/30">
+            <div className="flex items-center gap-2 sm:gap-2.5 p-2 rounded-xl bg-surface-container-lowest">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+                <span className="material-symbols-outlined text-[18px] sm:text-[20px]">directions_boat</span>
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] text-on-surface-variant font-bold">Kapal Pinisi</span>
-                <span className="text-xs text-inverse-surface font-extrabold truncate">Layar Berkembang</span>
+                <span className="text-[9px] sm:text-[10px] text-on-surface-variant font-bold">Kapal Pinisi</span>
+                <span className="text-[11px] sm:text-xs text-inverse-surface font-extrabold truncate">Layar Berkembang</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 p-2 rounded-xl bg-surface-container-lowest">
-              <div className="w-9 h-9 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary shrink-0">
-                <span className="material-symbols-outlined text-[20px]">anchor</span>
+            <div className="flex items-center gap-2 sm:gap-2.5 p-2 rounded-xl bg-surface-container-lowest">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary shrink-0">
+                <span className="material-symbols-outlined text-[18px] sm:text-[20px]">anchor</span>
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] text-on-surface-variant font-bold">Posisi Berlabuh</span>
-                <span className="text-xs text-secondary font-extrabold truncate">
+                <span className="text-[9px] sm:text-[10px] text-on-surface-variant font-bold">Posisi Berlabuh</span>
+                <span className="text-[11px] sm:text-xs text-secondary font-extrabold truncate">
                   {selectedPort ? selectedPort.name.split(' ')[0] : 'Pesisir Jawa'}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 p-2 rounded-xl bg-surface-container-lowest">
-              <div className="w-9 h-9 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary shrink-0">
-                <span className="material-symbols-outlined text-[20px]">location_on</span>
+            <div className="flex items-center gap-2 sm:gap-2.5 p-2 rounded-xl bg-surface-container-lowest">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary shrink-0">
+                <span className="material-symbols-outlined text-[18px] sm:text-[20px]">location_on</span>
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] text-on-surface-variant font-bold">Pelabuhan Kuno</span>
-                <span className="text-xs text-inverse-surface font-extrabold">{SPICE_PORTS.length} Terbuka</span>
+                <span className="text-[9px] sm:text-[10px] text-on-surface-variant font-bold">Pelabuhan Kuno</span>
+                <span className="text-[11px] sm:text-xs text-inverse-surface font-extrabold">{SPICE_PORTS.length} Terbuka</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 p-2 rounded-xl bg-surface-container-lowest">
-              <div className="w-9 h-9 rounded-lg bg-primary-fixed-dim flex items-center justify-center text-on-primary-fixed shrink-0">
-                <span className="material-symbols-outlined text-[20px]">eco</span>
+            <div className="flex items-center gap-2 sm:gap-2.5 p-2 rounded-xl bg-surface-container-lowest">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary-fixed-dim flex items-center justify-center text-on-primary-fixed shrink-0">
+                <span className="material-symbols-outlined text-[18px] sm:text-[20px]">eco</span>
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] text-on-surface-variant font-bold">Koleksi Rempah</span>
-                <span className="text-xs text-inverse-surface font-extrabold">18 / 24 Spesies</span>
+                <span className="text-[9px] sm:text-[10px] text-on-surface-variant font-bold">Koleksi Rempah</span>
+                <span className="text-[11px] sm:text-xs text-inverse-surface font-extrabold">18 / 24 Spesies</span>
               </div>
             </div>
+          </div>
+
+          {/* Quick Port Selector Chips (Especially useful for Mobile & Touchscreens) */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none pt-1">
+            <span className="text-[10px] sm:text-xs font-black uppercase text-on-surface-variant shrink-0 mr-1 flex items-center gap-1">
+              <span>⚓</span>
+              <span className="hidden sm:inline">Pilih Dermaga:</span>
+            </span>
+            {SPICE_PORTS.map(port => {
+              const isSelected = selectedPort?.id === port.id;
+              return (
+                <button
+                  key={port.id}
+                  onClick={() => handleSelectPort(port)}
+                  className={`shrink-0 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all whitespace-nowrap active:scale-95 ${
+                    isSelected
+                      ? 'bg-secondary text-on-secondary shadow-[0_2px_0_0_#410002]'
+                      : 'bg-surface-container text-on-surface hover:bg-surface-container-high border border-outline-variant/30'
+                  }`}
+                >
+                  <span>⚓</span>
+                  <span>{port.name}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                    isSelected ? 'bg-white/20 text-white' : 'bg-surface-container-lowest text-primary'
+                  }`}>
+                    {port.primaryCommodity.split(' ')[0]}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -127,17 +157,18 @@ export default function SpiceRoutePage() {
           
           {/* MAP CANVAS (8 Cols) */}
           <div className="lg:col-span-8 flex flex-col gap-2">
-            <div className="relative w-full rounded-3xl overflow-hidden shadow-[0_6px_0_0_#d5c4ae] bg-[#BAE6FD] min-h-[500px] flex flex-col select-none border-2 border-outline-variant/40">
+            <div className="relative w-full rounded-3xl overflow-hidden shadow-[0_6px_0_0_#d5c4ae] bg-[#BAE6FD] min-h-[380px] sm:min-h-[480px] flex flex-col select-none border-2 border-outline-variant/40">
               {/* Sea Wave Pattern Underlay */}
               <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#0284c7_1px,transparent_1px)] [background-size:16px_16px]" />
 
               {/* Map Compass Rose */}
-              <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/80 border-2 border-[#78350F] flex items-center justify-center text-xl font-black text-[#78350F] shadow-md pointer-events-none select-none z-10">
+              <div className="absolute top-3 sm:top-4 right-3 sm:right-4 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-white/80 border-2 border-[#78350F] flex items-center justify-center text-base sm:text-xl font-black text-[#78350F] shadow-md pointer-events-none select-none z-10">
                 🧭
               </div>
 
               {/* SVG Map of Nusantara */}
-              <div className="relative w-full h-[440px] my-auto">
+              <div className="relative w-full h-[320px] sm:h-[440px] my-auto">
+
                 <svg
                   viewBox="0 0 1000 500"
                   className="w-full h-full drop-shadow-md select-none overflow-visible"

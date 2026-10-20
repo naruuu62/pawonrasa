@@ -496,8 +496,8 @@ export default function LeaderboardPage() {
             </span>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+          <div className="overflow-x-auto scrollbar-none">
+            <table className="w-full min-w-[480px] text-left border-collapse">
               <thead>
                 <tr className="border-b border-outline-variant/40 text-[11px] font-extrabold text-on-surface-variant uppercase tracking-wider">
                   <th className="py-3 px-3">Peringkat</th>

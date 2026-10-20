@@ -28,6 +28,7 @@ function KitchenContent() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [isJudging, setIsJudging] = useState<boolean>(false);
   const [judgmentResult, setJudgmentResult] = useState<AIJudgmentResponse | null>(null);
+  const [mobileTab, setMobileTab] = useState<'pot' | 'pantry' | 'guest'>('pot');
 
   // Dynamic Countdown Timer Logic
   const getInitialTime = (difficulty: number) => {
@@ -193,8 +194,8 @@ function KitchenContent() {
 
           {/* Kitchen Meta Chips & Recipe Switcher */}
           <div className="flex items-center gap-2 flex-wrap shrink-0">
-            {/* Quick Switch Recipe buttons */}
-            <div className="hidden sm:flex items-center gap-1 bg-surface-container px-2 py-1 rounded-xl">
+            {/* Quick Switch Recipe buttons - now scrollable and responsive */}
+            <div className="flex items-center gap-1 bg-surface-container px-2 py-1 rounded-xl overflow-x-auto max-w-[180px] sm:max-w-none scrollbar-none">
               {RECIPES.map(r => (
                 <button
                   key={r.id}
@@ -204,7 +205,7 @@ function KitchenContent() {
                     setAddedIngredients([]);
                     setJudgmentResult(null);
                   }}
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded-lg transition-all ${
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-lg transition-all whitespace-nowrap ${
                     selectedRecipeId === r.id
                       ? 'bg-primary-container text-on-primary-container shadow-sm'
                       : 'text-on-surface-variant hover:text-on-surface'
@@ -239,36 +240,94 @@ function KitchenContent() {
 
             {/* Dynamic Estimated Coins Chip */}
             <div 
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container shadow-[0_2px_0_0_#ca8a04]"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-surface-container shadow-[0_2px_0_0_#ca8a04]"
               title={`Estimasi Hadiah: ${baseCoins} Koin resep + ${speedBonusCoins} Koin bonus kecepatan`}
             >
               <span className="material-symbols-outlined text-primary text-[16px]">monetization_on</span>
-              <span className="text-xs text-on-surface font-extrabold">+{estimatedTotalCoins} Koin</span>
+              <span className="text-xs text-on-surface font-extrabold">+{estimatedTotalCoins}</span>
             </div>
 
             <button
               onClick={handleResetPot}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-surface-container-highest hover:bg-surface-variant text-on-surface text-xs font-bold transition-all shadow-[0_2px_0_0_#ca8a04] active:translate-y-0.5"
+              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-surface-container-highest hover:bg-surface-variant text-on-surface text-xs font-bold transition-all shadow-[0_2px_0_0_#ca8a04] active:translate-y-0.5"
             >
               <span className="material-symbols-outlined text-[16px]">restart_alt</span>
-              <span>Mulai Ulang</span>
+              <span className="hidden xs:inline">Ulang</span>
             </button>
           </div>
+        </div>
+
+        {/* Mobile Navigation Tabs for Studio Dapur (< lg) */}
+        <div className="flex lg:hidden items-center justify-between bg-surface-container-low p-1.5 rounded-2xl border border-outline-variant/30 shadow-sm gap-1">
+          <button
+            type="button"
+            onClick={() => {
+              soundFx.playWoodClick();
+              setMobileTab('pot');
+            }}
+            className={`flex-1 py-2 px-1.5 rounded-xl text-xs font-black flex items-center justify-center gap-1 transition-all ${
+              mobileTab === 'pot'
+                ? 'bg-primary text-on-primary shadow-sm'
+                : 'text-on-surface-variant hover:bg-surface-container'
+            }`}
+          >
+            <span>🍲</span>
+            <span>Kuali Masak</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              soundFx.playWoodClick();
+              setMobileTab('pantry');
+            }}
+            className={`flex-1 py-2 px-1.5 rounded-xl text-xs font-black flex items-center justify-center gap-1 transition-all ${
+              mobileTab === 'pantry'
+                ? 'bg-primary text-on-primary shadow-sm'
+                : 'text-on-surface-variant hover:bg-surface-container'
+            }`}
+          >
+            <span>🎋</span>
+            <span>Rak Rempah</span>
+            {addedIngredients.length > 0 && (
+              <span className="px-1.5 py-0.2 rounded-full bg-surface-container-lowest text-primary text-[10px] font-black">
+                {addedIngredients.length}
+              </span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              soundFx.playWoodClick();
+              setMobileTab('guest');
+            }}
+            className={`flex-1 py-2 px-1.5 rounded-xl text-xs font-black flex items-center justify-center gap-1 transition-all ${
+              mobileTab === 'guest'
+                ? 'bg-primary text-on-primary shadow-sm'
+                : 'text-on-surface-variant hover:bg-surface-container'
+            }`}
+          >
+            <span>{currentRecipe.guest.avatar}</span>
+            <span>Lidah Tamu</span>
+          </button>
         </div>
 
         {/* Main 3-Column Studio Workspace */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1 items-start">
           
           {/* 1. LEFT PANEL: INGREDIENT PANTRY (3 Cols / 25%) */}
-          <section className="lg:col-span-3 flex flex-col gap-2.5 bg-surface-container-low p-3.5 rounded-2xl shadow-sm border border-outline-variant/30 h-full max-h-[720px] overflow-hidden">
+          <section className={`lg:col-span-3 ${
+            mobileTab === 'pantry' ? 'flex' : 'hidden'
+          } lg:flex flex-col gap-2.5 bg-surface-container-low p-3.5 rounded-2xl shadow-sm border border-outline-variant/30 h-full max-h-[720px] overflow-hidden`}>
             {/* Shelf Header */}
             <div className="flex items-center justify-between pb-1 border-b border-outline-variant/30">
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <span className="text-lg">🎋</span>
-                  <span className="text-sm font-extrabold text-on-surface">Rak Rempah</span>
+                  <span className="text-sm font-extrabold text-on-surface">Rak Rempah Segar</span>
                 </div>
-                <span className="text-[10px] text-on-surface-variant font-medium">Klik bahan segar untuk meracik</span>
+                <span className="text-[10px] text-on-surface-variant font-medium">Klik bahan untuk dimasukkan ke kuali</span>
               </div>
               <span className="px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container text-[10px] font-black">
                 {addedIngredients.length} Masuk
@@ -276,7 +335,7 @@ function KitchenContent() {
             </div>
 
             {/* Category Filter Chips */}
-            <div className="flex items-center gap-1 overflow-x-auto pb-1 no-scrollbar">
+            <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none">
               {[
                 { id: 'all', label: 'Semua' },
                 { id: 'protein', label: 'Protein' },
@@ -291,7 +350,7 @@ function KitchenContent() {
                     soundFx.playWoodClick();
                     setActiveCategory(cat.id);
                   }}
-                  className={`text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap transition-all ${
+                  className={`text-[10px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap transition-all ${
                     activeCategory === cat.id
                       ? 'bg-primary text-on-primary shadow-sm'
                       : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'
@@ -303,7 +362,7 @@ function KitchenContent() {
             </div>
 
             {/* 2-Column Chunky Tactile Cards Grid */}
-            <div className="grid grid-cols-2 gap-2 overflow-y-auto flex-1 pr-1">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2 overflow-y-auto flex-1 pr-1">
               {filteredIngredients.map(item => {
                 const countInPot = addedIngredients.filter(id => id === item.id).length;
                 const isRequired = currentRecipe.requiredIngredients.includes(item.id);
@@ -344,17 +403,48 @@ function KitchenContent() {
               })}
             </div>
 
-            {/* Shelf Tip */}
+            {/* Shelf Tip & Mobile Back to Pot button */}
             <div className="p-2 rounded-xl bg-surface-container flex items-start gap-1.5 border border-outline-variant/30">
               <span className="material-symbols-outlined text-primary text-[16px] shrink-0 mt-0.5">lightbulb</span>
               <p className="text-[10px] text-on-surface-variant leading-tight">
-                <strong className="text-on-surface">Tips Dapur:</strong> Masukkan bumbu kunci untuk mendongkrak akurasi rasa leluhur hingga 100%!
+                <strong className="text-on-surface">Tips Dapur:</strong> Masukkan bumbu kunci untuk mendongkrak akurasi rasa leluhur!
               </p>
             </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                soundFx.playWoodClick();
+                setMobileTab('pot');
+              }}
+              className="lg:hidden w-full py-2.5 rounded-xl bg-primary text-on-primary font-black text-xs flex items-center justify-center gap-1.5 shadow-sm active:translate-y-0.5"
+            >
+              <span>🍲 Lihat Kuali ({addedIngredients.length} Bahan Masuk)</span>
+            </button>
           </section>
 
           {/* 2. CENTER STAGE: ACTIVE COOKING POT (6 Cols / 50%) */}
-          <section className="lg:col-span-6 flex flex-col items-center justify-between bg-surface-container-low p-3.5 sm:p-5 rounded-2xl shadow-sm border border-outline-variant/30 min-h-[580px] relative overflow-hidden">
+          <section className={`lg:col-span-6 ${
+            mobileTab === 'pot' ? 'flex' : 'hidden'
+          } lg:flex flex-col items-center justify-between bg-surface-container-low p-3 sm:p-5 rounded-2xl shadow-sm border border-outline-variant/30 min-h-[520px] sm:min-h-[580px] relative overflow-hidden`}>
+            {/* Quick Mobile Shortcut to Open Pantry */}
+            <button
+              type="button"
+              onClick={() => {
+                soundFx.playWoodClick();
+                setMobileTab('pantry');
+              }}
+              className="lg:hidden w-full max-w-sm mb-2 py-2 px-4 rounded-xl bg-surface-container-high hover:bg-surface-container text-on-surface text-xs font-extrabold flex items-center justify-between border border-outline-variant/30 shadow-xs"
+            >
+              <span className="flex items-center gap-1.5">
+                <span>🎋</span>
+                <span>Buka Rak Rempah</span>
+              </span>
+              <span className="px-2 py-0.5 bg-primary text-on-primary text-[10px] font-black rounded-full">
+                {addedIngredients.length} Bahan di Kuali →
+              </span>
+            </button>
+
             <ClayPot
               recipe={currentRecipe}
               addedIngredients={addedIngredients}
@@ -367,17 +457,31 @@ function KitchenContent() {
           </section>
 
           {/* 3. RIGHT PANEL: CUSTOMER & AI TASTE RADAR (3 Cols / 25%) */}
-          <section className="lg:col-span-3 flex flex-col h-full max-h-[720px]">
+          <section className={`lg:col-span-3 ${
+            mobileTab === 'guest' ? 'flex' : 'hidden'
+          } lg:flex flex-col h-full max-h-[720px]`}>
             <GuestPortrait
               recipe={currentRecipe}
               guest={currentRecipe.guest}
               currentFlavors={currentFlavors}
               addedCount={addedIngredients.length}
             />
+            {/* Mobile return to pot CTA */}
+            <button
+              type="button"
+              onClick={() => {
+                soundFx.playWoodClick();
+                setMobileTab('pot');
+              }}
+              className="lg:hidden mt-3 w-full py-2.5 rounded-xl bg-primary text-on-primary font-black text-xs flex items-center justify-center gap-1.5 shadow-sm active:translate-y-0.5"
+            >
+              <span>🍲 Kembali Masak di Kuali</span>
+            </button>
           </section>
 
         </div>
       </div>
+
 
       {/* Loading Tasting Overlay */}
       {isJudging && (

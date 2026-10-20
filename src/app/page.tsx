@@ -28,7 +28,7 @@ export default function HomePage() {
             <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-container text-on-primary-container shrink-0 shadow-sm">
               <span className="material-symbols-outlined text-[18px]">wb_twilight</span>
             </span>
-            <p className="text-xs sm:text-sm text-on-surface truncate">
+            <p className="text-xs sm:text-sm text-on-surface line-clamp-2 sm:line-clamp-none">
               <span className="font-extrabold text-inverse-surface">Pawon Pagi:</span> Nanas dalam Pindang Palembang melunakkan serat ikan patin sekaligus memberi acidity alami tanpa cuka kimia!
             </p>
           </div>
@@ -41,7 +41,7 @@ export default function HomePage() {
         </div>
 
         {/* 1. HERO BANNER: Tantangan Spesial Harian */}
-        <section className="relative w-full rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-inverse-surface via-on-surface to-secondary text-surface p-6 sm:p-8 lg:p-10">
+        <section className="relative w-full rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-inverse-surface via-on-surface to-secondary text-surface p-5 sm:p-8 lg:p-10">
           {/* Decorative Backdrop Flourishes */}
           <div className="absolute -right-20 -bottom-24 w-96 h-96 rounded-full bg-primary-container/20 blur-3xl pointer-events-none"></div>
           <div className="absolute left-1/3 top-0 w-64 h-64 rounded-full bg-secondary-container/20 blur-2xl pointer-events-none"></div>
@@ -63,10 +63,10 @@ export default function HomePage() {
 
               {/* Headline & Deck */}
               <div className="flex flex-col gap-2">
-                <h1 className="text-3xl sm:text-5xl font-extrabold text-surface tracking-tight leading-tight">
+                <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-surface tracking-tight leading-tight">
                   Kuasai Rahasia <span className="text-primary-fixed-dim drop-shadow-sm">{heroRecipe.name}</span>
                 </h1>
-                <p className="text-sm sm:text-base text-surface-container max-w-xl leading-relaxed">
+                <p className="text-xs sm:text-sm lg:text-base text-surface-container max-w-xl leading-relaxed">
                   {heroRecipe.description}
                 </p>
               </div>

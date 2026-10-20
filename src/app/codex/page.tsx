@@ -199,10 +199,10 @@ export default function CodexPage() {
         </section>
 
         {/* Navigation Pill Tabs */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none sm:flex-wrap">
           {[
-            { id: 'rempah', label: `Kitab Rempah (${SPICE_CARDS.length})`, icon: 'menu_book', tag: 'Trading Card 3D' },
-            { id: 'resep', label: `Katalog Resep (${RECIPES.length})`, icon: 'soup_kitchen', tag: 'Menu Pusaka' },
+            { id: 'rempah', label: `Kitab Rempah (${SPICE_CARDS.length})`, icon: 'menu_book', tag: '3D Kartu' },
+            { id: 'resep', label: `Katalog Resep (${RECIPES.length})`, icon: 'soup_kitchen', tag: 'Pusaka' },
             { id: 'jamu', label: `Khasiat Jamu (${TRADITIONAL_JAMU.length})`, icon: 'local_florist', tag: 'UNESCO' },
           ].map(tab => (
             <button
@@ -211,13 +211,13 @@ export default function CodexPage() {
                 soundFx.playWoodClick();
                 setActiveTab(tab.id as any);
               }}
-              className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 ${
+              className={`shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 sm:gap-2 active:scale-95 ${
                 activeTab === tab.id
-                  ? 'bg-primary-container text-on-primary-container shadow-[0_3px_0_0_#422a00] scale-102'
+                  ? 'bg-primary-container text-on-primary-container shadow-[0_3px_0_0_#422a00] font-black'
                   : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container shadow-[0_2px_0_0_#d5c4ae]'
               }`}
             >
-              <span className="material-symbols-outlined text-[18px]">{tab.icon}</span>
+              <span className="material-symbols-outlined text-[17px] sm:text-[18px]">{tab.icon}</span>
               <span>{tab.label}</span>
               <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-black ${
                 activeTab === tab.id ? 'bg-primary text-on-primary' : 'bg-surface-container-high'
