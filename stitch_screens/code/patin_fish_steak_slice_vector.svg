@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" fill="none">
+  <!-- Fresh Patin Fish Cut / Catfish Steak -->
+  <!-- Outer skin & dark meat back -->
+  <path d="M 80 15 C 45 15, 20 40, 20 75 C 20 98, 38 112, 58 112 C 72 112, 78 95, 80 82 C 82 95, 88 112, 102 112 C 122 112, 140 98, 140 75 C 140 40, 115 15, 80 15 Z" fill="#2d3748" stroke="#1a202c" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Silver-grey fish skin layer -->
+  <path d="M 80 20 C 49 20, 26 44, 26 75 C 26 94, 41 106, 56 106 C 68 106, 73 90, 76 80 C 78 74, 82 74, 84 80 C 87 90, 92 106, 104 106 C 119 106, 134 94, 134 75 C 134 44, 111 20, 80 20 Z" fill="#718096"/>
+  <!-- Pink juicy succulent fish meat -->
+  <path d="M 80 24 C 53 24, 32 47, 32 75 C 32 90, 44 100, 56 100 C 66 100, 72 84, 76 74 C 77 70, 83 70, 84 74 C 88 84, 94 100, 104 100 C 116 100, 128 90, 128 75 C 128 47, 107 24, 80 24 Z" fill="#f87171" stroke="#dc2626" stroke-width="2"/>
+  <!-- Fish muscle grain layers / concentric rings -->
+  <path d="M 80 32 C 60 32, 42 50, 42 72 C 42 84, 50 92, 58 92 C 66 92, 72 78, 77 68 C 83 68, 88 92, 102 92 C 110 92, 118 84, 118 72 C 118 50, 100 32, 80 32 Z" fill="#fca5a5"/>
+  <path d="M 80 40 C 66 40, 52 54, 52 70 C 52 78, 58 84, 64 84 C 70 84, 74 72, 78 64 C 82 64, 86 72, 92 84 C 98 84, 104 78, 104 70 C 104 54, 94 40, 80 40 Z" fill="#fecaca"/>
+  <!-- Center cavity / belly void -->
+  <path d="M 80 56 C 73 56, 68 64, 68 76 C 68 85, 74 90, 77 94 C 78 96, 82 96, 83 94 C 86 90, 92 85, 92 76 C 92 64, 87 56, 80 56 Z" fill="none" stroke="#dc2626" stroke-width="3"/>
+  <!-- Spine bone center -->
+  <circle cx="80" cy="46" r="5" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+  <circle cx="80" cy="46" r="2" fill="#713f12"/>
+  <!-- Glistening highlights -->
+  <ellipse cx="60" cy="42" rx="10" ry="4" transform="rotate(-25 60 42)" fill="#ffffff" opacity="0.6"/>
+  <ellipse cx="100" cy="42" rx="10" ry="4" transform="rotate(25 100 42)" fill="#ffffff" opacity="0.6"/>
+  <circle cx="48" cy="65" r="3" fill="#ffffff" opacity="0.7"/>
+  <circle cx="112" cy="65" r="3" fill="#ffffff" opacity="0.7"/>
+</svg>
