@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { SPICE_CARDS } from '@/data/codex';
 import { RECIPES } from '@/data/recipes';
 import { TRADITIONAL_JAMU, JamuItem } from '@/data/jamu';
@@ -78,8 +79,17 @@ const JAMU_THEMES: Record<string, { bg: string; border: string; glow: string; te
   }
 };
 
-export default function CodexPage() {
-  const [activeTab, setActiveTab] = useState<'rempah' | 'resep' | 'jamu'>('rempah');
+function CodexContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const tabQuery = searchParams.get('tab');
+  const validTab: 'rempah' | 'resep' | 'jamu' =
+    tabQuery === 'resep' || tabQuery === 'jamu' || tabQuery === 'rempah'
+      ? tabQuery
+      : 'rempah';
+
+  const [activeTab, setActiveTab] = useState<'rempah' | 'resep' | 'jamu'>(validTab);
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRegion, setSelectedRegion] = useState<string>('Semua');
@@ -88,6 +98,27 @@ export default function CodexPage() {
   // Interactive Inspection Modals
   const [selectedRecipeDetail, setSelectedRecipeDetail] = useState<Recipe | null>(null);
   const [selectedJamuDetail, setSelectedJamuDetail] = useState<JamuItem | null>(null);
+
+  // Sync state if URL query params change
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'resep' || tab === 'jamu' || tab === 'rempah') {
+      setActiveTab(tab);
+    }
+    const recipeId = searchParams.get('recipe');
+    if (recipeId) {
+      const found = RECIPES.find(r => r.id === recipeId);
+      if (found) {
+        setSelectedRecipeDetail(found);
+      }
+    }
+  }, [searchParams]);
+
+  const handleTabChange = (tabId: 'rempah' | 'resep' | 'jamu') => {
+    soundFx.playWoodClick();
+    setActiveTab(tabId);
+    router.replace(`/codex?tab=${tabId}`, { scroll: false });
+  };
 
   // Flip Rempah Card
   const toggleFlip = (id: string) => {
@@ -207,10 +238,7 @@ export default function CodexPage() {
           ].map(tab => (
             <button
               key={tab.id}
-              onClick={() => {
-                soundFx.playWoodClick();
-                setActiveTab(tab.id as any);
-              }}
+              onClick={() => handleTabChange(tab.id as any)}
               className={`shrink-0 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 sm:gap-2 active:scale-95 ${
                 activeTab === tab.id
                   ? 'bg-primary-container text-on-primary-container shadow-[0_3px_0_0_#422a00] font-black'
@@ -994,5 +1022,22 @@ export default function CodexPage() {
       )}
 
     </div>
+  );
+}
+
+export default function CodexPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex-1 w-full bg-background min-h-screen flex items-center justify-center p-8">
+          <div className="flex flex-col items-center gap-3 text-on-surface">
+            <span className="material-symbols-outlined text-4xl animate-spin text-primary">progress_activity</span>
+            <span className="text-sm font-bold text-on-surface-variant">Memuat Ensiklopedia Rasa Nusantara...</span>
+          </div>
+        </div>
+      }
+    >
+      <CodexContent />
+    </Suspense>
   );
 }

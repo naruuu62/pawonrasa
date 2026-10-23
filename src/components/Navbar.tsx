@@ -44,13 +44,35 @@ export default function Navbar() {
     }
   };
 
+  const [currentQuery, setCurrentQuery] = useState('');
+
+  useEffect(() => {
+    setCurrentQuery(window.location.search);
+    const handleUpdateQuery = () => setCurrentQuery(window.location.search);
+    window.addEventListener('popstate', handleUpdateQuery);
+    return () => window.removeEventListener('popstate', handleUpdateQuery);
+  }, [pathname]);
+
   const navLinks = [
     { href: '/', label: 'Beranda', icon: 'home' },
     { href: '/kitchen', label: 'Studio Masak', icon: 'soup_kitchen' },
-    { href: '/codex', label: 'Pojok Budaya', icon: 'auto_stories' },
+    { href: '/codex?tab=resep', label: 'Katalog Resep', icon: 'menu_book' },
+    { href: '/codex?tab=jamu', label: 'Khasiat Jamu', icon: 'local_florist' },
+    { href: '/codex?tab=rempah', label: 'Kitab Rempah', icon: 'eco' },
     { href: '/spice-route', label: 'Jalur Rempah', icon: 'sailing' },
     { href: '/leaderboard', label: 'Peringkat', icon: 'military_tech' },
   ];
+
+  const isLinkActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    if (href.startsWith('/codex')) {
+      if (pathname !== '/codex') return false;
+      const targetQuery = href.includes('?') ? href.split('?')[1] : 'tab=rempah';
+      if (!currentQuery && targetQuery.includes('tab=rempah')) return true;
+      return currentQuery.includes(targetQuery);
+    }
+    return pathname === href;
+  };
 
   const expPercent = profile ? Math.min(100, Math.round((profile.exp / profile.expToNextLevel) * 100)) : 0;
   const expText = profile ? `${profile.exp} / ${profile.expToNextLevel} XP` : '0 / 300 XP';
@@ -90,19 +112,24 @@ export default function Navbar() {
         {/* Center Navigation Pill Container for Desktop */}
         <nav className="hidden lg:flex items-center gap-1 bg-surface-container-low p-1.5 rounded-full shadow-[inset_0_2px_4px_rgba(69,26,3,0.08)]">
           {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive = isLinkActive(link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => soundFx.playWoodClick()}
-                className={`text-xs font-bold px-3.5 py-2 rounded-full transition-all flex items-center gap-1.5 ${
+                onClick={() => {
+                  soundFx.playWoodClick();
+                  if (link.href.includes('?')) {
+                    setCurrentQuery(link.href.slice(link.href.indexOf('?')));
+                  }
+                }}
+                className={`text-[11px] xl:text-xs font-bold px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
                   isActive
                     ? 'bg-primary-container text-on-primary-container shadow-[0_2px_0_0_#422a00]'
                     : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
                 }`}
               >
-                <span className="material-symbols-outlined text-[16px]">{link.icon}</span>
+                <span className="material-symbols-outlined text-[15px] xl:text-[16px]">{link.icon}</span>
                 <span>{link.label}</span>
               </Link>
             );
@@ -190,12 +217,17 @@ export default function Navbar() {
       {/* Mobile Scrollable Pill Navigation with Touch Swiping */}
       <div className="flex lg:hidden items-center gap-1 px-2.5 py-1.5 border-t border-[#ffeae1] bg-surface-container-low overflow-x-auto scrollbar-none">
         {navLinks.map((link) => {
-          const isActive = pathname === link.href;
+          const isActive = isLinkActive(link.href);
           return (
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => soundFx.playWoodClick()}
+              onClick={() => {
+                soundFx.playWoodClick();
+                if (link.href.includes('?')) {
+                  setCurrentQuery(link.href.slice(link.href.indexOf('?')));
+                }
+              }}
               className={`shrink-0 text-xs font-bold px-3 py-1.5 rounded-full transition-all whitespace-nowrap flex items-center gap-1 active:scale-95 ${
                 isActive
                   ? 'bg-primary-container text-on-primary-container shadow-[0_2px_0_0_#422a00] font-black'

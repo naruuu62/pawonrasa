@@ -3,12 +3,13 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { RECIPES } from '@/data/recipes';
+import { Recipe } from '@/types';
 import { soundFx } from '@/lib/sound';
 import { Star, MapPin, X } from 'lucide-react';
 
 export default function HomePage() {
   const [selectedRegion, setSelectedRegion] = useState<string>('Semua');
-  const [showRecipeModal, setShowRecipeModal] = useState<boolean>(false);
+  const [selectedModalRecipe, setSelectedModalRecipe] = useState<Recipe | null>(null);
 
   const heroRecipe = RECIPES.find(r => r.id === 'pindang-patin') || RECIPES[0];
   const regions = ['Semua', 'Sumatera', 'Jawa', 'Bali & NTB', 'Sulawesi'];
@@ -102,7 +103,7 @@ export default function HomePage() {
                   type="button"
                   onClick={() => {
                     soundFx.playWoodClick();
-                    setShowRecipeModal(true);
+                    setSelectedModalRecipe(heroRecipe);
                   }}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-surface-container-lowest/20 hover:bg-surface-container-lowest/30 backdrop-blur-md text-surface font-bold text-sm shadow-sm transition-all cursor-pointer"
                 >
@@ -178,9 +179,45 @@ export default function HomePage() {
         </section>
 
         {/* 2. Feature Navigation Cards Grid */}
-        <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5">
           <Link
-            href="/codex"
+            href="/codex?tab=resep"
+            onClick={() => soundFx.playWoodClick()}
+            className="group bg-surface-container-low hover:bg-surface-container p-4 rounded-2xl shadow-[0_4px_0_0_#d5c4ae] transition-all flex items-center gap-3.5 active:translate-y-0.5 active:shadow-none"
+          >
+            <div className="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center text-on-primary-container shrink-0 shadow-sm group-hover:rotate-6 transition-transform">
+              <span className="material-symbols-outlined text-[26px]">soup_kitchen</span>
+            </div>
+            <div>
+              <h3 className="text-sm font-extrabold text-inverse-surface">
+                Katalog Resep Pusaka
+              </h3>
+              <p className="text-xs text-on-surface-variant font-medium">
+                Masakan leluhur & bumbu rahasia
+              </p>
+            </div>
+          </Link>
+
+          <Link
+            href="/codex?tab=jamu"
+            onClick={() => soundFx.playWoodClick()}
+            className="group bg-surface-container-low hover:bg-surface-container p-4 rounded-2xl shadow-[0_4px_0_0_#d5c4ae] transition-all flex items-center gap-3.5 active:translate-y-0.5 active:shadow-none"
+          >
+            <div className="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary shrink-0 shadow-sm group-hover:rotate-6 transition-transform">
+              <span className="material-symbols-outlined text-[26px]">local_florist</span>
+            </div>
+            <div>
+              <h3 className="text-sm font-extrabold text-inverse-surface">
+                Khasiat Jamu Tradisional
+              </h3>
+              <p className="text-xs text-on-surface-variant font-medium">
+                Alkimia herbal UNESCO & petuah seduh
+              </p>
+            </div>
+          </Link>
+
+          <Link
+            href="/codex?tab=rempah"
             onClick={() => soundFx.playWoodClick()}
             className="group bg-surface-container-low hover:bg-surface-container p-4 rounded-2xl shadow-[0_4px_0_0_#d5c4ae] transition-all flex items-center gap-3.5 active:translate-y-0.5 active:shadow-none"
           >
@@ -189,10 +226,10 @@ export default function HomePage() {
             </div>
             <div>
               <h3 className="text-sm font-extrabold text-inverse-surface">
-                Kitab Rempah Alami
+                Kitab Rempah 3D
               </h3>
               <p className="text-xs text-on-surface-variant font-medium">
-                Koleksi tanaman pusaka & rahasia leluhur
+                Koleksi tanaman pusaka Nusantara
               </p>
             </div>
           </Link>
@@ -220,7 +257,7 @@ export default function HomePage() {
             onClick={() => soundFx.playWoodClick()}
             className="group bg-surface-container-low hover:bg-surface-container p-4 rounded-2xl shadow-[0_4px_0_0_#d5c4ae] transition-all flex items-center gap-3.5 active:translate-y-0.5 active:shadow-none"
           >
-            <div className="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary shrink-0 shadow-sm group-hover:rotate-6 transition-transform">
+            <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-900 shrink-0 shadow-sm group-hover:rotate-6 transition-transform">
               <span className="material-symbols-outlined text-[26px]">military_tech</span>
             </div>
             <div>
@@ -238,14 +275,25 @@ export default function HomePage() {
         <section className="flex flex-col gap-4 pt-2">
           {/* Header & Filter Controls */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-inverse-surface flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary-container text-[26px]">restaurant_menu</span>
-                Katalog Resep Kepulauan Nusantara
-              </h2>
-              <p className="text-xs text-on-surface-variant font-medium mt-0.5">
-                Pilih menu autentik untuk diuji oleh tetua adat di Studio Dapur PawonRasa
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-extrabold text-inverse-surface flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary-container text-[26px]">restaurant_menu</span>
+                  Katalog Resep Kepulauan Nusantara
+                </h2>
+                <p className="text-xs text-on-surface-variant font-medium mt-0.5">
+                  Pilih menu autentik untuk diuji oleh tetua adat di Studio Dapur PawonRasa
+                </p>
+              </div>
+
+              <Link
+                href="/codex?tab=resep"
+                onClick={() => soundFx.playWoodClick()}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface-container-high hover:bg-surface-container text-on-surface text-xs font-bold border border-outline-variant/30 shadow-sm transition-all shrink-0 self-start sm:self-auto"
+              >
+                <span className="material-symbols-outlined text-[16px] text-primary">menu_book</span>
+                <span>Buka Ensiklopedia Resep & Kisah</span>
+              </Link>
             </div>
 
             {/* Region Filter Chips */}
@@ -348,9 +396,18 @@ export default function HomePage() {
 
                 {/* Bottom Action */}
                 <div className="mt-4 pt-3 flex items-center justify-between gap-2 border-t border-outline-variant/20">
-                  <span className="text-xs text-inverse-surface font-extrabold bg-surface-container-low px-2.5 py-1 rounded-lg">
-                    +{recipe.difficulty * 75} XP
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      soundFx.playWoodClick();
+                      setSelectedModalRecipe(recipe);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-inverse-surface text-xs font-bold transition-all shadow-sm active:translate-y-0.5"
+                  >
+                    <span className="material-symbols-outlined text-[16px] text-primary">menu_book</span>
+                    <span>Buka Resep</span>
+                  </button>
+
                   <Link
                     href={`/kitchen?recipe=${recipe.id}`}
                     onClick={() => soundFx.playWoodClick()}
@@ -368,53 +425,80 @@ export default function HomePage() {
       </div>
 
       {/* Recipe Details Modal */}
-      {showRecipeModal && (
+      {selectedModalRecipe && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-surface-container-lowest rounded-3xl p-6 max-w-md w-full shadow-2xl border border-outline-variant flex flex-col gap-4 relative">
+          <div className="bg-surface-container-lowest rounded-3xl p-6 max-w-lg w-full shadow-2xl border border-outline-variant flex flex-col gap-4 relative max-h-[90vh] overflow-y-auto">
             <button
-              onClick={() => setShowRecipeModal(false)}
+              onClick={() => setSelectedModalRecipe(null)}
               className="absolute top-4 right-4 w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center text-2xl">
-                🐟
+              <div className="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center text-2xl shrink-0 shadow-inner">
+                🍲
               </div>
-              <div>
-                <h3 className="text-lg font-extrabold text-inverse-surface">{heroRecipe.name}</h3>
-                <p className="text-xs text-primary font-bold">{heroRecipe.subtitle}</p>
+              <div className="min-w-0 pr-6">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-secondary bg-secondary-fixed/50 px-2 py-0.5 rounded-full">
+                    {selectedModalRecipe.region}
+                  </span>
+                  <span className="text-[10px] font-bold text-on-surface-variant">
+                    ⏱️ {selectedModalRecipe.cookTime}
+                  </span>
+                </div>
+                <h3 className="text-lg font-extrabold text-inverse-surface mt-1 truncate">{selectedModalRecipe.name}</h3>
+                <p className="text-xs text-primary font-bold truncate">{selectedModalRecipe.subtitle}</p>
               </div>
             </div>
+
+            <p className="text-xs text-on-surface-variant leading-relaxed">
+              {selectedModalRecipe.description}
+            </p>
 
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">
                 Bahan Wajib Menurut Resep Tradisional:
               </h4>
               <div className="flex flex-wrap gap-1.5">
-                {heroRecipe.requiredIngredients.map((ing) => (
+                {selectedModalRecipe.requiredIngredients.map((ing) => (
                   <span key={ing} className="text-xs bg-surface-container text-on-surface font-semibold px-2.5 py-1 rounded-full capitalize">
-                    🌿 {ing.replace('-', ' ')}
+                    🌿 {ing.replace(/-/g, ' ').replace(/_/g, ' ')}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="bg-surface-container-low p-3 rounded-2xl text-xs text-on-surface-variant leading-relaxed">
-              💡 <strong>Kearifan Lokal:</strong> {heroRecipe.culturalStory}
+            <div className="bg-surface-container-low p-3.5 rounded-2xl text-xs text-on-surface-variant leading-relaxed border border-outline-variant/30">
+              💡 <strong>Kearifan Lokal:</strong> {selectedModalRecipe.culturalStory}
             </div>
 
-            <Link
-              href={`/kitchen?recipe=${heroRecipe.id}`}
-              onClick={() => {
-                soundFx.playWoodClick();
-                setShowRecipeModal(false);
-              }}
-              className="w-full py-3 rounded-2xl bg-primary-container text-on-primary-container font-extrabold text-center text-sm shadow-[0_3px_0_0_#422a00] hover:brightness-105 active:translate-y-0.5 transition-all"
-            >
-              Masuk ke Studio Masak Sekarang
-            </Link>
+            <div className="flex flex-col gap-2 pt-2 border-t border-outline-variant/20">
+              <Link
+                href={`/kitchen?recipe=${selectedModalRecipe.id}`}
+                onClick={() => {
+                  soundFx.playWoodClick();
+                  setSelectedModalRecipe(null);
+                }}
+                className="w-full py-3 rounded-2xl bg-primary-container text-on-primary-container font-extrabold text-center text-sm shadow-[0_3px_0_0_#422a00] hover:brightness-105 active:translate-y-0.5 transition-all flex items-center justify-center gap-1.5"
+              >
+                <span>Masuk ke Studio Masak Sekarang</span>
+                <span className="material-symbols-outlined text-[18px]">play_arrow</span>
+              </Link>
+
+              <Link
+                href={`/codex?tab=resep&recipe=${selectedModalRecipe.id}`}
+                onClick={() => {
+                  soundFx.playWoodClick();
+                  setSelectedModalRecipe(null);
+                }}
+                className="w-full py-2.5 rounded-2xl bg-surface-container text-on-surface font-bold text-center text-xs hover:bg-surface-container-high transition-all flex items-center justify-center gap-1.5"
+              >
+                <span className="material-symbols-outlined text-[16px] text-primary">auto_stories</span>
+                <span>Buka Resep & Cerita Filosofi Lengkap di Kitab Pusaka</span>
+              </Link>
+            </div>
           </div>
         </div>
       )}

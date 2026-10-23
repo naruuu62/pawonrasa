@@ -20,6 +20,40 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    return [
+      {
+        source: '/recipes',
+        destination: '/codex?tab=resep',
+        permanent: false,
+      },
+      {
+        source: '/resep',
+        destination: '/codex?tab=resep',
+        permanent: false,
+      },
+      {
+        source: '/katalog',
+        destination: '/codex?tab=resep',
+        permanent: false,
+      },
+      {
+        source: '/katalog-resep',
+        destination: '/codex?tab=resep',
+        permanent: false,
+      },
+      {
+        source: '/jamu',
+        destination: '/codex?tab=jamu',
+        permanent: false,
+      },
+      {
+        source: '/khasiat-jamu',
+        destination: '/codex?tab=jamu',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
