@@ -53,12 +53,35 @@ export default function Navbar() {
     return () => window.removeEventListener('popstate', handleUpdateQuery);
   }, [pathname]);
 
-  const navLinks = [
+  const [isCodexDropdownOpen, setIsCodexDropdownOpen] = useState(false);
+
+  const codexSublinks = [
+    { 
+      href: '/codex?tab=rempah', 
+      label: 'Kitab Rempah', 
+      desc: 'Ensiklopedia 3D bumbu keramat nusantara',
+      icon: 'eco' 
+    },
+    { 
+      href: '/codex?tab=resep', 
+      label: 'Katalog Resep', 
+      desc: 'Buku panduan resep & masakan warisan',
+      icon: 'menu_book' 
+    },
+    { 
+      href: '/codex?tab=jamu', 
+      label: 'Khasiat Jamu', 
+      desc: 'Racikan herbal tradisional warisan UNESCO',
+      icon: 'local_florist' 
+    },
+  ];
+
+  const mobileNavLinks = [
     { href: '/', label: 'Beranda', icon: 'home' },
     { href: '/kitchen', label: 'Studio Masak', icon: 'soup_kitchen' },
+    { href: '/codex?tab=rempah', label: 'Kitab Rempah', icon: 'eco' },
     { href: '/codex?tab=resep', label: 'Katalog Resep', icon: 'menu_book' },
     { href: '/codex?tab=jamu', label: 'Khasiat Jamu', icon: 'local_florist' },
-    { href: '/codex?tab=rempah', label: 'Kitab Rempah', icon: 'eco' },
     { href: '/spice-route', label: 'Jalur Rempah', icon: 'sailing' },
     { href: '/leaderboard', label: 'Peringkat', icon: 'military_tech' },
   ];
@@ -87,7 +110,7 @@ export default function Navbar() {
       {/* Top Heritage Ribbon */}
       <div className="h-1 sm:h-1.5 w-full bg-gradient-to-r from-primary-fixed-dim via-primary-container to-secondary"></div>
       
-      <div className="h-16 sm:h-20 max-w-[1280px] mx-auto px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4">
+      <div className="h-16 sm:h-20 w-full px-4 sm:px-8 xl:px-12 flex items-center justify-between gap-3 sm:gap-6">
         {/* Brand Mascot & Logo */}
         <Link 
           href="/" 
@@ -109,31 +132,131 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Center Navigation Pill Container for Desktop */}
+        {/* Center Streamlined Navigation Pill Container for Desktop */}
         <nav className="hidden lg:flex items-center gap-1 bg-surface-container-low p-1.5 rounded-full shadow-[inset_0_2px_4px_rgba(69,26,3,0.08)]">
-          {navLinks.map((link) => {
-            const isActive = isLinkActive(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => {
-                  soundFx.playWoodClick();
-                  if (link.href.includes('?')) {
-                    setCurrentQuery(link.href.slice(link.href.indexOf('?')));
-                  }
-                }}
-                className={`text-[11px] xl:text-xs font-bold px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                  isActive
-                    ? 'bg-primary-container text-on-primary-container shadow-[0_2px_0_0_#422a00]'
-                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
-                }`}
-              >
-                <span className="material-symbols-outlined text-[15px] xl:text-[16px]">{link.icon}</span>
-                <span>{link.label}</span>
-              </Link>
-            );
-          })}
+          {/* Beranda */}
+          <Link
+            href="/"
+            onClick={() => soundFx.playWoodClick()}
+            className={`text-xs xl:text-sm font-bold px-3 xl:px-4 py-1.5 xl:py-2 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              pathname === '/'
+                ? 'bg-primary-container text-on-primary-container shadow-[0_2px_0_0_#422a00]'
+                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[17px] xl:text-[18px]">home</span>
+            <span>Beranda</span>
+          </Link>
+
+          {/* Studio Masak */}
+          <Link
+            href="/kitchen"
+            onClick={() => soundFx.playWoodClick()}
+            className={`text-xs xl:text-sm font-bold px-3 xl:px-4 py-1.5 xl:py-2 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              pathname === '/kitchen'
+                ? 'bg-primary-container text-on-primary-container shadow-[0_2px_0_0_#422a00]'
+                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[17px] xl:text-[18px]">soup_kitchen</span>
+            <span>Studio Masak</span>
+          </Link>
+
+          {/* Pojok Budaya with Dropdown Menu */}
+          <div 
+            className="relative"
+            onMouseEnter={() => setIsCodexDropdownOpen(true)}
+            onMouseLeave={() => setIsCodexDropdownOpen(false)}
+          >
+            <Link
+              href="/codex"
+              onClick={() => {
+                soundFx.playWoodClick();
+                setIsCodexDropdownOpen(false);
+              }}
+              className={`text-xs xl:text-sm font-bold px-3 xl:px-4 py-1.5 xl:py-2 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                pathname === '/codex'
+                  ? 'bg-primary-container text-on-primary-container shadow-[0_2px_0_0_#422a00]'
+                  : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[17px] xl:text-[18px]">auto_stories</span>
+              <span>Pojok Budaya</span>
+              <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${isCodexDropdownOpen ? 'rotate-180' : ''}`}>
+                expand_more
+              </span>
+            </Link>
+
+            {/* Dropdown Menu */}
+            {isCodexDropdownOpen && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 w-72 animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="bg-surface-container-lowest border border-[#ffeae1] rounded-2xl p-2 shadow-[0_12px_32px_rgba(69,26,3,0.15)] flex flex-col gap-1">
+                  {codexSublinks.map((sub) => {
+                    const isSubActive = pathname === '/codex' && (
+                      currentQuery.includes(sub.href.split('?')[1]) ||
+                      (!currentQuery && sub.href.includes('tab=rempah'))
+                    );
+                    return (
+                      <Link
+                        key={sub.href}
+                        href={sub.href}
+                        onClick={() => {
+                          soundFx.playWoodClick();
+                          setIsCodexDropdownOpen(false);
+                          if (sub.href.includes('?')) {
+                            setCurrentQuery(sub.href.slice(sub.href.indexOf('?')));
+                          }
+                        }}
+                        className={`flex items-start gap-3 p-2.5 rounded-xl transition-all ${
+                          isSubActive 
+                            ? 'bg-primary-container/15 text-primary-container font-extrabold'
+                            : 'text-on-surface hover:bg-surface-container-low'
+                        }`}
+                      >
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                          isSubActive ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container text-on-surface-variant'
+                        }`}>
+                          <span className="material-symbols-outlined text-[18px]">{sub.icon}</span>
+                        </div>
+                        <div className="flex flex-col text-left">
+                          <span className="text-xs font-extrabold leading-tight text-on-surface">{sub.label}</span>
+                          <span className="text-[10px] text-on-surface-variant leading-tight mt-0.5">{sub.desc}</span>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Jalur Rempah */}
+          <Link
+            href="/spice-route"
+            onClick={() => soundFx.playWoodClick()}
+            className={`text-xs xl:text-sm font-bold px-3 xl:px-4 py-1.5 xl:py-2 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              pathname === '/spice-route'
+                ? 'bg-primary-container text-on-primary-container shadow-[0_2px_0_0_#422a00]'
+                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[17px] xl:text-[18px]">sailing</span>
+            <span>Jalur Rempah</span>
+          </Link>
+
+          {/* Peringkat */}
+          <Link
+            href="/leaderboard"
+            onClick={() => soundFx.playWoodClick()}
+            className={`text-xs xl:text-sm font-bold px-3 xl:px-4 py-1.5 xl:py-2 rounded-full transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              pathname === '/leaderboard'
+                ? 'bg-primary-container text-on-primary-container shadow-[0_2px_0_0_#422a00]'
+                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[17px] xl:text-[18px]">military_tech</span>
+            <span>Peringkat</span>
+          </Link>
         </nav>
 
         {/* Right Section: Coins, Sound SFX, Level XP, Dynamic Chef Avatar */}
@@ -216,7 +339,7 @@ export default function Navbar() {
 
       {/* Mobile Scrollable Pill Navigation with Touch Swiping */}
       <div className="flex lg:hidden items-center gap-1 px-2.5 py-1.5 border-t border-[#ffeae1] bg-surface-container-low overflow-x-auto scrollbar-none">
-        {navLinks.map((link) => {
+        {mobileNavLinks.map((link) => {
           const isActive = isLinkActive(link.href);
           return (
             <Link
